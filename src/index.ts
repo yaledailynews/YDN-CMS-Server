@@ -1,5 +1,6 @@
 import { ApolloServer } from '@apollo/server';
 import { startStandaloneServer } from '@apollo/server/standalone';
+import { MongoClient } from 'mongodb';
 
 // A schema is a collection of type definitions (hence "typeDefs")
 // that together define the "shape" of queries that are executed against
@@ -60,3 +61,26 @@ const { url } = await startStandaloneServer(server, {
 });
 
 console.log(`🚀  Server ready at: ${url}`);
+
+// Connecting to a local port
+const uri = 'mongodb://127.0.0.1:27017';
+
+const client = new MongoClient(uri);
+
+connect();
+
+// ESNext syntax using async-await
+async function connect() {
+    try {
+        await client.connect();
+        const db = client.db('YDN-CMS');
+        console.log(
+            `Successfully connected to db ${db.databaseName}`);
+    }
+    catch (err) {
+        console.error(`we encountered ${err}`);
+    }
+    finally {
+        client.close();
+    }
+}
